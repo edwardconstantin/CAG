@@ -1,6 +1,7 @@
 #MiniWidget Demo -- a library designed to quickly create tooltip-like widgets linked to any element in the page.
 
 ##Features
+* Highly configurable.
 * Unlimited miniWidgets with same/different data sources on the same page.
 * Localisation with real-time language change, useful for single page apps.
 * Data caching used for real-time content changes.
