@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personal Loan MiniWidget</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <script src="components/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/pl_widget.css">
+    <script src="js/MiniWidget.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<style>
+    body {
+        font-family: "pnRegular","Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+    fieldset {
+        border-radius: 1em;
+        -webkit-border-radius: 1em;
+        -moz-border-radius: 1em;
+        text-align: center;
+    }
+    .plwidget {
+        display: inline-block;
+        margin-top:100px;
+    }
+    .plwidget2 {
+        display: inline-block;
+        margin-top:250px;
+    }
+    fieldset {
+        width: 150px;;
+    }
+</style>
+<body>
+
+    <fieldset>
+        <legend>Switch language</legend>
+        <input type="radio" name="language" value="en-HK" checked> en-HK<br/>
+        <input type="radio" name="language" value="da-DK"> da-DK
+    </fieldset>
+
+    <a href="#" data="5000" class="plwidget">Mouse over a link (data=5000)</a><br/>
+    <a href="#" data="7000" class="plwidget2">Mouse over yet another link (data=7000)</a>
+
+</body>
+</html>

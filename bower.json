@@ -1,0 +1,7 @@
+{
+    "name": "personalloan-widget-dba",
+    "dependencies": {
+        "jquery": "~1.11.2"
+    },
+    "devDependencies": {}
+}

@@ -1,0 +1,23 @@
+{
+
+    "da-DK" : {
+        "currency"          : "kr.",
+        "loan_term"         : "Ved lån af {{totalRepayment}} {{currency}} over {{tenureInYears}} år",
+        "starting_from"     : "Ydelse fra",
+        "rates_from"        : "Rente fra",
+        "get_offer"         : "Få lånetilbud",
+        "more_options"      : "Flere muligheder",
+        "short_month"       : "md."
+    },
+
+    "en-HK" : {
+        "currency"          : "HK$",
+        "loan_term"         : "For a loan of {{currency}} {{totalRepayment}} over {{tenureInYears}} years",
+        "starting_from"     : "Starting from",
+        "rates_from"        : "Rates from",
+        "get_offer"         : "Get loan offer",
+        "more_options"      : "More options",
+        "short_month"       : "mo."
+    }
+
+}
