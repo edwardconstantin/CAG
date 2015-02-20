@@ -120,11 +120,32 @@
 
         me.onDataReady = function () {};
 
+        var repeatRegExp = /({{\s*#repeat\s*(.*?)\s*}})([\s\S]*?)({{\s*\/repeat\s*}})/g,
+            detailRegExp = /({{\s*#repeat\s*(.*?)\s*}})([\s\S]*?)({{\s*\/repeat\s*}})/;
+
         me.parseTpl = function(tpl, data) {
+            var repeats = tpl.match(repeatRegExp);
+            if (repeats) tpl = me.tplRepeat(tpl, data, repeats);
             return tpl.replace(/{{(.*?)}}/g, function (match, key) {
                 return data[key] || '';
             });
         };
+
+        me.tplRepeat = function (tpl, data, repeats) {
+            var partial;
+            for (i=0; i<repeats.length; i++) {
+                matches = repeats[i].match(detailRegExp);
+                rows = data[matches[2]];
+                partial = '';
+                for (j=0; j < rows.length; j++) {
+                    partial += me.parseTpl(matches[3], rows[j]);
+                }
+                tpl = tpl.replace(repeats[i], function (match) {
+                    return partial;
+                });
+            }
+            return tpl;
+        }
 
 
         /*

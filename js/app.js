@@ -1,7 +1,7 @@
 (function () {
 
-    var plwidget = new MiniWidget({targetClass : '.plwidget'});
-    plwidget.onDataReady = function () { doPL(plwidget) }
+    //var plwidget = new MiniWidget({targetClass : '.plwidget'});
+    //plwidget.onDataReady = function () { doPL(plwidget) }
 
     // With all possible configuration options
     var plwidget2 = new MiniWidget({
@@ -84,4 +84,66 @@
             widget.onDataReady();
         });
     };
+
+
+    //----- Using #repeat directive
+    var mywidget = new MiniWidget({
+        targetClass : '.plwidget3',
+        myTemplates: ['pl_allinone']
+    });
+
+    mywidget.onDataReady = function () {
+
+        var localized = mywidget.lang[mywidget.locale],
+            o = mywidget.options;
+
+        // Parse the title
+        var title = mywidget.parseTpl(localized.loan_term, {
+            totalRepayment  : mywidget.format(o.loanAmount, 0, 3, ',', '.'),
+            currency        : localized.currency,
+            tenureInYears   : parseInt(o.loanTenure / 12)
+        });
+
+        //console.log(mywidget.data[0]);
+
+        var data = mywidget.data,
+            parsed = mywidget.doneTpl,
+            row = {},
+            rows = [];
+
+        mywidget.displayRec = (mywidget.displayRec > data.length)? data.length : mywidget.displayRec;
+
+        // Prepare data for #repeat directive
+        for (var i = 0; i < mywidget.displayRec; i++) {
+            row = data[i].mortgage;
+            rows.push({
+                company                 : (i + 1 + '. ') + data[i].company.name,
+                currency                : localized.currency,
+                short_month             : localized.short_month,
+                monthlyPayment          : mywidget.format(row.monthlyPayment, 0, 3, ',', '.'),
+                monthlyInterestRate     : row.monthlyInterestRate,
+                get_offer               : localized.get_offer
+            });
+        }
+        // Parse the main template and include the parsed.rows
+        parsed.main = mywidget.parseTpl(mywidget.templates.pl_allinone, {
+            title           : title,
+            starting_from   : localized.starting_from,
+            rates_from      : localized.rates_from,
+            rows            : rows,
+            more_options    : localized.more_options
+        });
+
+        mywidget.render();
+
+        // Add behaviour for "More Options" button
+        $('#more_options', mywidget.container).click(function (e) {
+            e.preventDefault();
+            mywidget.displayRec += 2;
+            mywidget.onDataReady();
+        });
+
+        console.log(rows);
+    }
+
 })();
