@@ -47,6 +47,8 @@
                 get_offer               : localized.get_offer
             });
         }
+
+
         // Parse the main template and include the parsed.rows
         parsed.main = plwidget.parseTpl(plwidget.templates.pl_widget, {
             title           : title,
@@ -85,7 +87,7 @@
         },
         targetClass    : '.plwidget2',
         langFile       : 'lang/pl_lang.json',
-        targetAttr     : 'data',
+        targetAttr     : 'custom-attr',
         targetPorperty : 'loanAmount',
         pathToTemplates: 'tpl/',
         myTemplates: ['pl_widget'],
