@@ -1,7 +1,8 @@
-(function () {
+(function (window, jQuery) {
 
-    if (typeof window.jQuery == 'undefined') {
-        console.error('MiniWidget depends on jQuery!');
+    if (typeof jQuery == 'undefined') {
+        if (typeof window.console !== 'undefined')
+            console.error('MiniWidget depends on jQuery!');
         return;
     }
 
@@ -13,9 +14,9 @@
 
         //--- Config options
 
-        me.rootURL   = opt.rootURL   || "http://www.ap-northeast-1.api.compareglobal.co.uk";
-        me.proxyPath = opt.proxyPath || '/v1/money/loan';
-        me.dataPath  = opt.dataPath  || '/v1/result/';
+        me.rootURL   = opt.rootURL   || '';
+        me.proxyPath = opt.proxyPath || '';
+        me.dataPath  = opt.dataPath  || '';
 
         me.locale = opt.locale || "en-HK";
 
@@ -87,6 +88,7 @@
         me.dataURL  = me.rootURL + me.dataPath;
 
         me.requestData = function () {
+
             $.ajax({
                 url: me.proxyURL,
                 type: "POST",
@@ -104,7 +106,10 @@
         };
 
         me.getResults = function getResults(token) {
-            var resultsUrl = me.dataURL + token;
+
+            var token = token || '',
+                resultsUrl = me.dataURL + token;
+
             $.ajax({
                 url: resultsUrl,
                 type: "GET",
@@ -120,31 +125,50 @@
 
         me.onDataReady = function () {};
 
-        var repeatRegExp = /({{\s*#repeat\s*(.*?)\s*}})([\s\S]*?)({{\s*\/repeat\s*}})/g,
-            detailRegExp = /({{\s*#repeat\s*(.*?)\s*}})([\s\S]*?)({{\s*\/repeat\s*}})/;
 
         me.parseTpl = function(tpl, data) {
-            var repeats = tpl.match(repeatRegExp);
-            if (repeats) tpl = me.tplRepeat(tpl, data, repeats);
-            return tpl.replace(/{{(.*?)}}/g, function (match, key) {
+
+            var repeatRegExp = /(?:{{(\s*#repeat.*?|\s*\/repeat\s*)}})/g,
+                repeatMatches = tpl.match(repeatRegExp);
+
+            if (repeatMatches) {
+                for (i=0; i<repeatMatches.length; i++) {
+                   if (repeatMatches[i].indexOf('#repeat')>-1) {} else {break;}
+                }
+                regEx = new RegExp('({{\\s*#repeat[\\s\\S]*?){' + (i-1) + '}({{\\s*#repeat[\\s\\S]*?{{\\s*\/repeat\\s*}})');
+                repeat = tpl.match(regEx)[2];
+                tpl = me.tplRepeat(tpl, data, repeat);
+            }
+
+            return tpl.replace(/{{\s*(.*?)\s*}}/g, function (match, key) {
                 return data[key] || '';
             });
+
         };
 
-        me.tplRepeat = function (tpl, data, repeats) {
-            var partial;
-            for (i=0; i<repeats.length; i++) {
-                matches = repeats[i].match(detailRegExp);
-                rows = data[matches[2]];
-                partial = '';
+
+        me.tplRepeat = function (tpl, data, repeat) {
+
+            var matches, rows, partial,
+                detailRegExp = /({{\s*#repeat\s*(.*?)\s*}})([\s\S]*?)({{\s*\/repeat\s*}})/;
+
+
+            matches = repeat.match(detailRegExp);
+            rows = data[matches[2]];
+            partial = '';
+            if (rows) {
                 for (j=0; j < rows.length; j++) {
                     partial += me.parseTpl(matches[3], rows[j]);
                 }
-                tpl = tpl.replace(repeats[i], function (match) {
-                    return partial;
-                });
+            } else {
+                if (typeof window.console !== 'undefined')
+                    console.error("Data not found for " + matches[1]);
             }
-            return tpl;
+            tpl = tpl.replace(repeat, function (match) {
+                return partial;
+            });
+
+            return me.parseTpl(tpl, data);
         }
 
 
@@ -218,7 +242,7 @@
                 })
             });
 
-            //For demo purposes
+            //For demo purposes -- TBR
             $('input').click(function() {
                 me.locale = $(this).val();
                 me.onDataReady();
@@ -229,13 +253,13 @@
         });
 
         me.documentReady = function () {
-            me.requestData();
+            me.rootURL ? me.requestData() : me.getResults();
         }
     };
 
     window.MiniWidget = MiniWidget;
 
-})();
+})(window, jQuery);
 
 
 

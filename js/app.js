@@ -1,10 +1,77 @@
 (function () {
 
-    //var plwidget = new MiniWidget({targetClass : '.plwidget'});
-    //plwidget.onDataReady = function () { doPL(plwidget) }
+    //--- This is an example using old data structure
 
-    // With all possible configuration options
-    var plwidget2 = new MiniWidget({
+    var plwidget = new MiniWidget({
+        dataPath    : '/tmp/oldservice.json',
+        targetClass : '.plwidget',
+        myTemplates: ['pl_widget']
+    });
+
+    plwidget.onDataReady = function () {
+
+        var localized = plwidget.lang[plwidget.locale],
+            o = plwidget.options;
+
+        // Parse the title
+        var title = plwidget.parseTpl(localized.loan_term, {
+            totalRepayment  : plwidget.format(o.loanAmount, 0, 3, ',', '.'),
+            currency        : localized.currency,
+            tenureInYears   : parseInt(o.loanTenure / 12)
+        });
+
+
+        var data = plwidget.data.compargoGlobalApiResponse.searchResults.searchResultItems,
+            parsed = plwidget.doneTpl,
+            row = {},
+            rows = [];
+
+        //console.log(data[0]);
+
+        plwidget.displayRec = (plwidget.displayRec >= data.length)? data.length : plwidget.displayRec;
+
+        // Prepare data for #repeat directive
+        for (var i = 0; i < plwidget.displayRec; i++) {
+            row = data[i],
+            row.monthlyPayment = parseInt(row.ydelseOptions.min_ydelse_maned_25000);
+
+            //-- HACK
+            if (!row.monthlyPayment) row.monthlyPayment = 500;
+
+            rows.push({
+                company                 : (i + 1 + '. ') + data[i].companyName,
+                currency                : localized.currency,
+                short_month             : localized.short_month,
+                monthlyPayment          : plwidget.format(row.monthlyPayment, 0, 3, ',', '.'),
+                monthlyInterestRate     : row.lowestMonthlyFlatRate,
+                get_offer               : localized.get_offer
+            });
+        }
+        // Parse the main template and include the parsed.rows
+        parsed.main = plwidget.parseTpl(plwidget.templates.pl_widget, {
+            title           : title,
+            starting_from   : localized.starting_from,
+            rates_from      : localized.rates_from,
+            rows            : rows,
+            more_options    : localized.more_options
+        });
+
+        plwidget.render();
+
+        // Add behaviour for "More Options" button
+        $('#more_options', plwidget.container).click(function (e) {
+            e.preventDefault();
+            plwidget.displayRec += 2;
+            plwidget.onDataReady();
+        });
+
+    }
+
+
+    //--- This is an example using new data structure
+
+    // An instance with all possible configuration options
+    var mywidget = new MiniWidget({
         rootURL     : "http://www.ap-northeast-1.api.compareglobal.co.uk",
         proxyPath   : '/v1/money/loan',
         dataPath    : '/v1/result/',
@@ -21,75 +88,12 @@
         targetAttr     : 'data',
         targetPorperty : 'loanAmount',
         pathToTemplates: 'tpl/',
-        myTemplates    : ['pl_main', 'pl_row'],
+        myTemplates: ['pl_widget'],
         // Adjust widget position based on your design
         adjustOffset   : {
             top: -58,
             left: 22
         }
-    });
-
-    plwidget2.onDataReady = function () { doPL(plwidget2) }
-
-    function doPL(widget) {
-
-        var localized = widget.lang[widget.locale],
-            o = widget.options;
-
-        // Parse the title
-        var title = widget.parseTpl(localized.loan_term, {
-            totalRepayment  : widget.format(o.loanAmount, 0, 3, ',', '.'),
-            currency        : localized.currency,
-            tenureInYears   : parseInt(o.loanTenure / 12)
-        });
-
-        //console.log(widget.data[0]);
-
-        var data = widget.data,
-            parsed = widget.doneTpl,
-            row = {};
-
-
-        widget.displayRec = (widget.displayRec > data.length)? data.length : widget.displayRec;
-
-        // Parse the rows template
-        parsed.rows = '';
-        for (var i = 0; i < widget.displayRec; i++) {
-            row = data[i].mortgage;
-            parsed.rows += widget.parseTpl(widget.templates.pl_row, {
-                company                 : (i + 1 + '. ') + data[i].company.name,
-                currency                : localized.currency,
-                short_month             : localized.short_month,
-                monthlyPayment          : widget.format(row.monthlyPayment, 0, 3, ',', '.'),
-                monthlyInterestRate     : row.monthlyInterestRate,
-                get_offer               : localized.get_offer
-            });
-        }
-
-        // Parse the main template and include the parsed.rows
-        parsed.main = widget.parseTpl(widget.templates.pl_main, {
-            title           : title,
-            starting_from   : localized.starting_from,
-            rates_from      : localized.rates_from,
-            rows            : parsed.rows,
-            more_options    : localized.more_options
-        });
-
-        widget.render();
-
-        // Add behaviour for "More Options" button
-        $('#more_options', widget.container).click(function (e) {
-            e.preventDefault();
-            widget.displayRec += 2;
-            widget.onDataReady();
-        });
-    };
-
-
-    //----- Using #repeat directive
-    var mywidget = new MiniWidget({
-        targetClass : '.plwidget3',
-        myTemplates: ['pl_allinone']
     });
 
     mywidget.onDataReady = function () {
@@ -111,7 +115,7 @@
             row = {},
             rows = [];
 
-        mywidget.displayRec = (mywidget.displayRec > data.length)? data.length : mywidget.displayRec;
+        mywidget.displayRec = (mywidget.displayRec >= data.length)? data.length : mywidget.displayRec;
 
         // Prepare data for #repeat directive
         for (var i = 0; i < mywidget.displayRec; i++) {
@@ -126,7 +130,7 @@
             });
         }
         // Parse the main template and include the parsed.rows
-        parsed.main = mywidget.parseTpl(mywidget.templates.pl_allinone, {
+        parsed.main = mywidget.parseTpl(mywidget.templates.pl_widget, {
             title           : title,
             starting_from   : localized.starting_from,
             rates_from      : localized.rates_from,
@@ -143,7 +147,6 @@
             mywidget.onDataReady();
         });
 
-        console.log(rows);
     }
 
 })();
