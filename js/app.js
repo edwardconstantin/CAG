@@ -4,7 +4,7 @@
 
     var plwidget = new MiniWidget({
         dataPath    : 'tmp/oldservice.json',
-        targetClass : '.plwidget',
+        targetClass : '.plwidgetOld',
         myTemplates: ['pl_widget']
     });
 
@@ -27,6 +27,9 @@
             rows = [];
 
         //console.log(data[0]);
+        data = mywidget.excludeItems(data);
+
+        $(plwidget.targetClass).text('Fra ' + mywidget.format(parseInt(data[0].ydelseOptions.min_ydelse_maned_25000), 0, 3, ',', '.') + ' kr. pr/md.');
 
         plwidget.displayRec = (plwidget.displayRec >= data.length)? data.length : plwidget.displayRec;
 
@@ -67,8 +70,7 @@
         // Add behaviour for "More Options" button
         $('#more_options', plwidget.container).click(function (e) {
             e.preventDefault();
-            plwidget.displayRec += 2;
-            plwidget.onDataReady();
+            window.location = "http://www.samlino.dk/forbrugslaan?amount=250000&tenure=60";
         });
 
     }
@@ -82,19 +84,21 @@
         proxyPath   : '/v1/money/loan',
         dataPath    : '/v1/result/',
         locale      : "en-HK",
-        displayRec  : 6,
+        displayRec  : 3,
+        locale      : "da-DK",
         options: {
             locale      : "en-HK",
             loanAmount  : 10000, // <-- This is the targetProperty defined further down
             loanTenure  : 60,
             filter      : "INSTALMENT"
         },
-        targetClass    : '.plwidget2',
+        targetClass    : '.plwidgetNew',
         langFile       : 'lang/pl_lang.json',
-        targetAttr     : 'custom-attr',
+        targetAttr     : 'data',
         targetPorperty : 'loanAmount',
         pathToTemplates: 'tpl/',
         myTemplates: ['pl_widget'],
+        excludeList: [2, 3, 4, 5, 6],
         // Adjust widget position based on your design
         adjustOffset   : {
             top: -58,
@@ -121,6 +125,10 @@
             row = {},
             rows = [];
 
+        data = mywidget.excludeItems(data);
+
+        $(mywidget.targetClass).text('Fra ' + mywidget.format(data[0].mortgage.monthlyPayment, 0, 3, ',', '.') + ' kr. pr/md.');
+
         mywidget.displayRec = (mywidget.displayRec >= data.length)? data.length : mywidget.displayRec;
 
         // Prepare data for #repeat directive
@@ -138,6 +146,7 @@
                 get_offer               : localized.get_offer
             });
         }
+
         // Parse the main template and include the parsed.rows
         parsed.main = mywidget.parseTpl(mywidget.templates.pl_widget, {
             title           : title,

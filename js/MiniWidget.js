@@ -18,9 +18,11 @@
         me.proxyPath = opt.proxyPath || '';
         me.dataPath  = opt.dataPath  || '';
 
-        me.locale = opt.locale || "en-HK";
+        me.locale = opt.locale || "da-DK";
 
         me.displayRec = opt.displayRec || 3;
+
+        me.excludeList = opt.excludeList || [];
 
         me.options = opt.options || {
             locale: "en-HK",
@@ -215,6 +217,17 @@
             $container.css("z-index", max + 1 );
         };
 
+        //Filters out the items specified by me.excludeList property
+        me.excludeItems = function (arr) {
+            var newArray = new Array();
+            for(var i = 0; i<arr.length; i++){
+                if (me.excludeList.indexOf(i) > -1) {
+                    continue;
+                }
+                newArray.push(arr[i]);
+            }
+            return newArray;
+        };;
 
         $( document ).bind("ready", function() {
 
@@ -239,14 +252,10 @@
             $(me.targetClass).each(function (i) {
                 var $el = $(this);
                 $el.mouseover(function () {
+                    me.displayRec = 3;
+                    me.onDataReady();
                     me.setPosition($el);
                 })
-            });
-
-            //For demo purposes -- TBR
-            $('input').click(function() {
-                me.locale = $(this).val();
-                me.onDataReady();
             });
 
             me.documentReady();
