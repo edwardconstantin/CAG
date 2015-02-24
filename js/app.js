@@ -29,7 +29,7 @@
         //console.log(data[0]);
         data = mywidget.excludeItems(data);
 
-        $(plwidget.targetClass).text('Fra ' + mywidget.format(parseInt(data[0].ydelseOptions.min_ydelse_maned_25000), 0, 3, ',', '.') + ' kr. pr/md.');
+        $(plwidget.targetClass).text('Fra ' + mywidget.format(parseInt(data[0].ydelseOptions.min_ydelse_maned_25000)*10, 0, 3, ',', '.') + ' kr. pr/md.');
 
         plwidget.displayRec = (plwidget.displayRec >= data.length)? data.length : plwidget.displayRec;
 
@@ -49,7 +49,7 @@
                 },
                 currency                : localized.currency,
                 short_month             : localized.short_month,
-                monthlyPayment          : plwidget.format(row.monthlyPayment, 0, 3, ',', '.'),
+                monthlyPayment          : plwidget.format(row.monthlyPayment*10, 0, 3, ',', '.'),
                 monthlyInterestRate     : row.lowestMonthlyFlatRate,
                 get_offer               : localized.get_offer
             });
