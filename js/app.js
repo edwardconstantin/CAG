@@ -3,7 +3,7 @@
     //--- This is an example using old data structure
 
     var plwidget = new MiniWidget({
-        dataPath    : '/tmp/oldservice.json',
+        dataPath    : 'tmp/oldservice.json',
         targetClass : '.plwidget',
         myTemplates: ['pl_widget']
     });
@@ -11,13 +11,13 @@
     plwidget.onDataReady = function () {
 
         var localized = plwidget.lang[plwidget.locale],
-            o = plwidget.options;
+            opt = plwidget.options;
 
         // Parse the title
         var title = plwidget.parseTpl(localized.loan_term, {
-            totalRepayment  : plwidget.format(o.loanAmount, 0, 3, ',', '.'),
+            totalRepayment  : plwidget.format(opt.loanAmount, 0, 3, ',', '.'),
             currency        : localized.currency,
-            tenureInYears   : parseInt(o.loanTenure / 12)
+            tenureInYears   : parseInt(opt.loanTenure / 12)
         });
 
 
@@ -35,11 +35,15 @@
             row = data[i],
             row.monthlyPayment = parseInt(row.ydelseOptions.min_ydelse_maned_25000);
 
-            //-- HACK
+            //-- HACK, data missing?
             if (!row.monthlyPayment) row.monthlyPayment = 500;
 
             rows.push({
-                company                 : (i + 1 + '. ') + data[i].companyName,
+                id: (i + 1 + '.'),
+                company: {
+                    name: data[i].companyName,
+                    logo: data[i].logo
+                },
                 currency                : localized.currency,
                 short_month             : localized.short_month,
                 monthlyPayment          : plwidget.format(row.monthlyPayment, 0, 3, ',', '.'),
@@ -101,16 +105,16 @@
     mywidget.onDataReady = function () {
 
         var localized = mywidget.lang[mywidget.locale],
-            o = mywidget.options;
+            opt = mywidget.options;
 
         // Parse the title
         var title = mywidget.parseTpl(localized.loan_term, {
-            totalRepayment  : mywidget.format(o.loanAmount, 0, 3, ',', '.'),
+            totalRepayment  : mywidget.format(opt.loanAmount, 0, 3, ',', '.'),
             currency        : localized.currency,
-            tenureInYears   : parseInt(o.loanTenure / 12)
+            tenureInYears   : parseInt(opt.loanTenure / 12)
         });
 
-        //console.log(mywidget.data[0]);
+        console.log(mywidget.data[0]);
 
         var data = mywidget.data,
             parsed = mywidget.doneTpl,
@@ -123,7 +127,10 @@
         for (var i = 0; i < mywidget.displayRec; i++) {
             row = data[i].mortgage;
             rows.push({
-                company                 : (i + 1 + '. ') + data[i].company.name,
+                id: (i + 1 + '.'),
+                company: {
+                    name: data[i].company.name
+                },
                 currency                : localized.currency,
                 short_month             : localized.short_month,
                 monthlyPayment          : mywidget.format(row.monthlyPayment, 0, 3, ',', '.'),
