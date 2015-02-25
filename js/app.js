@@ -95,7 +95,7 @@
 
     }
 
-/*
+
     //--- This is an example using new data structure
 
     // An instance with all possible configuration options
@@ -186,5 +186,5 @@
         });
 
     }
-*/
+
 })();
