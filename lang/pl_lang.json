@@ -2,7 +2,7 @@
 
     "da-DK" : {
         "currency"          : "kr.",
-        "loan_term"         : "Ved lån af {{currency}} {{totalRepayment}} over {{tenureInYears}} år",
+        "loan_term"         : "Ved lån af {{currency}} {{loanAmount}} over {{tenureInYears}} år",
         "starting_from"     : "Ydelse fra",
         "rates_from"        : "Rente fra",
         "get_offer"         : "Få lånetilbud",
@@ -12,7 +12,7 @@
 
     "en-HK" : {
         "currency"          : "HK$",
-        "loan_term"         : "For a loan of {{currency}} {{totalRepayment}} over {{tenureInYears}} years",
+        "loan_term"         : "For a loan of {{currency}} {{loanAmount}} over {{tenureInYears}} years",
         "starting_from"     : "Starting from",
         "rates_from"        : "Rates from",
         "get_offer"         : "Get loan offer",

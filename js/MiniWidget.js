@@ -24,6 +24,8 @@
 
         me.excludeList = opt.excludeList || [];
 
+        me.legacyMode = opt.legacyMode || false;
+
         me.options = opt.options || {
             locale: "en-HK",
             loanAmount: 10000,
@@ -33,12 +35,14 @@
 
         me.targetClass = opt.targetClass || '.plwidget';
         me.targetAttr = opt.targetAttr || 'data';
-        me.targetPorperty = opt.targetPorperty || 'loanAmount';
+        me.targetProperty = opt.targetProperty || 'loanAmount';
 
         me.pathToTemplates = opt.pathToTemplates || 'tpl/';
         me.myTemplates = opt.myTemplates || ['pl_main', 'pl_row'];
 
         me.langFile = opt.langFile || 'lang/pl_lang.json';
+
+        me.fadeSpeed = opt.fadeSpeed || 200;
 
         me.adjustOffset = opt.adjustOffset || {
             top: -58,
@@ -117,8 +121,31 @@
                 type: "GET",
                 dataType: "xml/html/script/json",
                 contentType: "application/json",
+                data: JSON.stringify(me.options, null, 2),
                 complete: function (data) {
                     me.data = JSON.parse(data.responseText);
+
+                    if (me.legacyMode) {
+                        var data = me.data.compargoGlobalApiResponse.searchResults.searchResultItems,
+                            filteredArr = [],
+                            FormFilter = {};
+
+                        FormFilter.data = me.options;
+                        data = _CAG.formatData(data, FormFilter);
+
+                        for (var i=0; i < data.length; i++) {
+                            if (data[i].link && data[i].computedLapr.lowest) filteredArr.push(data[i])
+                        }
+
+                        filteredArr.sort(function (a, b) {
+                            return a.computedLapr.lowest - b.computedLapr.lowest;
+                        });
+
+                        me.data = filteredArr;
+
+                        var t;
+                    }
+
                     me.onDataReady();
                 }
             });
@@ -203,7 +230,7 @@
             me.container.style.top = top + 'px';
             me.container.style.left = left + 'px';
 
-            $container.fadeIn(500, function() {});
+            $container.fadeIn(me.fadeSpeed, function() {});
             //me.getOnTop($container);
         }
 
@@ -240,12 +267,12 @@
             $container = $(me.container);
 
             $container.mouseleave(function () {
-                $container.fadeOut(500);
+                $container.fadeOut(me.fadeSpeed);
             });
 
             $(me.targetClass + ":first").attr(me.targetAttr, function(el, val) {
                 if ((val = parseInt(val)) > 0) {
-                    me.options[me.targetPorperty] = val;
+                    me.options[me.targetProperty] = val;
                 }
             });
 

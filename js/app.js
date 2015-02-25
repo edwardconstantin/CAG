@@ -2,44 +2,63 @@
 
     //--- This is an example using old data structure
 
-    var plwidget = new MiniWidget({
+    var car_widget = new MiniWidget({
+        legacyMode  : true,
         dataPath    : 'tmp/oldservice.json',
-        targetClass : '.plwidgetOld',
-        myTemplates: ['pl_widget']
+        targetClass : '.plwidgetA',
+        myTemplates: ['pl_widget'],
+        targetProperty: 'loanAmnt',
+        options: {
+            //loanAmnt: 250000,
+            tenureAmnt: 60
+        }
     });
 
-    plwidget.onDataReady = function () {
+    car_widget.onDataReady = function () {widgetProcess(car_widget)};
+
+    var watch_widget = new MiniWidget({
+        legacyMode  : true,
+        dataPath    : 'tmp/oldservice.json',
+        targetClass : '.plwidgetB',
+        myTemplates: ['pl_widget'],
+        targetProperty: 'loanAmnt',
+        options: {
+            //loanAmnt: 18000,
+            tenureAmnt: 60
+        }
+    });
+
+    watch_widget.onDataReady = function () {widgetProcess(watch_widget)};
+
+    var widgetProcess = function (plwidget) {
 
         var localized = plwidget.lang[plwidget.locale],
             opt = plwidget.options;
 
         // Parse the title
         var title = plwidget.parseTpl(localized.loan_term, {
-            totalRepayment  : plwidget.format(opt.loanAmount, 0, 3, ',', '.'),
+            loanAmount  : plwidget.format(opt.loanAmnt, 0, 3, ',', '.'),
             currency        : localized.currency,
-            tenureInYears   : parseInt(opt.loanTenure / 12)
+            tenureInYears   : parseInt(opt.tenureAmnt / 12)
         });
 
 
-        var data = plwidget.data.compargoGlobalApiResponse.searchResults.searchResultItems,
+        var data = plwidget.data,
             parsed = plwidget.doneTpl,
             row = {},
             rows = [];
 
-        //console.log(data[0]);
-        data = mywidget.excludeItems(data);
+        data = plwidget.excludeItems(data);
 
-        $(plwidget.targetClass).text('Fra ' + mywidget.format(parseInt(data[0].ydelseOptions.min_ydelse_maned_25000)*10, 0, 3, ',', '.') + ' kr. pr/md.');
+        //console.log(data[0]);
+
+        $(plwidget.targetClass).text('Fra ' + plwidget.format(parseInt(data[0].computedMrpyment.lowest), 0, 3, ',', '.') + ' kr. pr/md.');
 
         plwidget.displayRec = (plwidget.displayRec >= data.length)? data.length : plwidget.displayRec;
 
         // Prepare data for #repeat directive
         for (var i = 0; i < plwidget.displayRec; i++) {
-            row = data[i],
-            row.monthlyPayment = parseInt(row.ydelseOptions.min_ydelse_maned_25000);
-
-            //-- HACK, data missing?
-            if (!row.monthlyPayment) row.monthlyPayment = 500;
+            row = data[i];
 
             rows.push({
                 id: (i + 1 + '.'),
@@ -49,9 +68,10 @@
                 },
                 currency                : localized.currency,
                 short_month             : localized.short_month,
-                monthlyPayment          : plwidget.format(row.monthlyPayment*10, 0, 3, ',', '.'),
-                monthlyInterestRate     : row.lowestMonthlyFlatRate,
-                get_offer               : localized.get_offer
+                monthlyPayment          : plwidget.format(row.computedMrpyment.lowest, 0, 3, ',', '.'),
+                monthlyInterestRate     : plwidget.format(row.computedLapr.lowest, 2, 3, ',', '.'),
+                get_offer               : localized.get_offer,
+                link                    : row.link
             });
         }
 
@@ -70,12 +90,12 @@
         // Add behaviour for "More Options" button
         $('#more_options', plwidget.container).click(function (e) {
             e.preventDefault();
-            window.location = "http://www.samlino.dk/forbrugslaan?amount=250000&tenure=60";
+            window.location = "http://www.samlino.dk/forbrugslaan?amount=" + plwidget.options.loanAmnt + "&tenure=" + plwidget.options.tenureAmnt;
         });
 
     }
 
-
+/*
     //--- This is an example using new data structure
 
     // An instance with all possible configuration options
@@ -95,7 +115,7 @@
         targetClass    : '.plwidgetNew',
         langFile       : 'lang/pl_lang.json',
         targetAttr     : 'data',
-        targetPorperty : 'loanAmount',
+        targetProperty : 'loanAmount',
         pathToTemplates: 'tpl/',
         myTemplates: ['pl_widget'],
         excludeList: [2, 3, 4, 5, 6],
@@ -113,7 +133,7 @@
 
         // Parse the title
         var title = mywidget.parseTpl(localized.loan_term, {
-            totalRepayment  : mywidget.format(opt.loanAmount, 0, 3, ',', '.'),
+            loanAmount      : mywidget.format(opt.loanAmount, 0, 3, ',', '.'),
             currency        : localized.currency,
             tenureInYears   : parseInt(opt.loanTenure / 12)
         });
@@ -166,5 +186,5 @@
         });
 
     }
-
+*/
 })();
