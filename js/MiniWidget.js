@@ -133,6 +133,8 @@
                             filteredArr = [],
                             FormFilter = {};
 
+                        data = me.excludeItems(data);
+
                         FormFilter.data = me.options;
                         data = _CAG.formatData(data, FormFilter);
 
@@ -273,7 +275,7 @@
         me.excludeItems = function (arr) {
             var newArray = new Array();
             for(var i = 0; i<arr.length; i++){
-                if (me.excludeList.indexOf(i) > -1) {
+                if ($.inArray(parseInt(arr[i].id), me.excludeList) > -1) {
                     continue;
                 }
                 newArray.push(arr[i]);

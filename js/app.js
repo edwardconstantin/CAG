@@ -25,6 +25,7 @@
         targetClass : '.plwidgetB',
         applyBtnOnly : false,
         displayRec  : 3,
+        excludeList : [],
         myTemplates: ['pl_widget'],
         targetProperty: 'loanAmnt',
         options: {
@@ -53,8 +54,6 @@
             parsed = plwidget.doneTpl,
             row = {},
             rows = [];
-
-        data = plwidget.excludeItems(data);
 
         console.log(data[0]);
 
