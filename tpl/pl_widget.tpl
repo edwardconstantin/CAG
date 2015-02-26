@@ -13,7 +13,7 @@
                 <td>{{id}} {{company.name}} <span class="featured" featured="{{featured}}">Featured</span></td>
                 <td class="pl-blue">{{currency}} {{monthlyPayment}} / {{short_month}}</td>
                 <td class="pl-blue">{{monthlyInterestRate}}%</td>
-                <td><a class="pl-yellow-button" href="{{link}}" target="_blank">{{get_offer}}</a></div></td>
+                <td><a class="pl-yellow-button" href="{{link}}" target="_blank" applyButton="{{applyButton}}">{{get_offer}}</a></div></td>
             </tr>
             <tr>
                 <td colspan="4"><div class="pl-hr"></div></td>

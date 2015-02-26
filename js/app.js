@@ -73,7 +73,8 @@
                     logo: data[i].logo
                 },
                 dataid                  : row.id,
-                featured                : row.featured,
+                featured                : row.featured_onlineBanks,
+                applyButton             : row.applyButton,
                 currency                : localized.currency,
                 short_month             : localized.short_month,
                 monthlyPayment          : plwidget.format(row.computedMrpyment.lowest, 0, 3, ',', '.'),

@@ -84,6 +84,7 @@
                 type: "GET",
                 complete: function(data) {
                     me.lang = JSON.parse(data.responseText);
+                    me.rootURL ? me.requestData() : me.getResults();
                 }
             });
         }
@@ -324,7 +325,7 @@
         });
 
         me.documentReady = function () {
-            me.rootURL ? me.requestData() : me.getResults();
+            //me.rootURL ? me.requestData() : me.getResults();
         }
     };
 
