@@ -147,6 +147,10 @@ a.pl-yellow-button {
     white-space: nowrap;
 }
 
+a.pl-yellow-button[href=''] {
+    visibility: hidden;
+}
+
 div.pl-footer a.pl-yellow-button {
     font-size: 14px;
     font-weight: bold;

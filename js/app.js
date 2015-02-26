@@ -7,6 +7,8 @@
         dataPath    : 'tmp/oldservice.json',
         targetClass : '.plwidgetA',
         myTemplates: ['pl_widget'],
+        applyBtnOnly : false,
+        displayRec  : 3,
         targetProperty: 'loanAmnt',
         options: {
             //loanAmnt: 250000,
@@ -14,12 +16,15 @@
         }
     });
 
-    car_widget.onDataReady = function () {widgetProcess(car_widget)};
+    car_widget.controller = function () {widgetProcess(car_widget)};
+    window.car_widget = car_widget;
 
     var watch_widget = new MiniWidget({
         legacyMode  : true,
         dataPath    : 'tmp/oldservice.json',
         targetClass : '.plwidgetB',
+        applyBtnOnly : false,
+        displayRec  : 3,
         myTemplates: ['pl_widget'],
         targetProperty: 'loanAmnt',
         options: {
@@ -28,7 +33,8 @@
         }
     });
 
-    watch_widget.onDataReady = function () {widgetProcess(watch_widget)};
+    watch_widget.controller = function () {widgetProcess(watch_widget)};
+    window.watch_widget = watch_widget;
 
     var widgetProcess = function (plwidget) {
 
@@ -50,7 +56,7 @@
 
         data = plwidget.excludeItems(data);
 
-        //console.log(data[0]);
+        console.log(data[0]);
 
         $(plwidget.targetClass).text('Fra ' + plwidget.format(parseInt(data[0].computedMrpyment.lowest), 0, 3, ',', '.') + ' kr. pr/md.');
 
@@ -66,6 +72,7 @@
                     name: data[i].companyName,
                     logo: data[i].logo
                 },
+                dataid                  : row.id,
                 currency                : localized.currency,
                 short_month             : localized.short_month,
                 monthlyPayment          : plwidget.format(row.computedMrpyment.lowest, 0, 3, ',', '.'),
@@ -126,7 +133,7 @@
         }
     });
 
-    mywidget.onDataReady = function () {
+    mywidget.controller = function () {
 
         var localized = mywidget.lang[mywidget.locale],
             opt = mywidget.options;
@@ -159,6 +166,8 @@
                 company: {
                     name: data[i].company.name
                 },
+                dataid                  : row.id,
+                link                    : '#',
                 currency                : localized.currency,
                 short_month             : localized.short_month,
                 monthlyPayment          : mywidget.format(row.monthlyPayment, 0, 3, ',', '.'),
@@ -182,7 +191,7 @@
         $('#more_options', mywidget.container).click(function (e) {
             e.preventDefault();
             mywidget.displayRec += 2;
-            mywidget.onDataReady();
+            mywidget.controller();
         });
 
     }

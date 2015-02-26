@@ -9,7 +9,7 @@
                 <th></th>
             </tr>
             {{#repeat rows}}
-            <tr>
+            <tr data-id="{{dataid}}">
                 <td>{{id}} {{company.name}}</td>
                 <td class="pl-blue">{{currency}} {{monthlyPayment}} / {{short_month}}</td>
                 <td class="pl-blue">{{monthlyInterestRate}}%</td>

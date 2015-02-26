@@ -26,6 +26,8 @@
 
         me.legacyMode = opt.legacyMode || false;
 
+        me.applyBtnOnly = opt.applyBtnOnly || false,
+
         me.options = opt.options || {
             locale: "en-HK",
             loanAmount: 10000,
@@ -134,25 +136,47 @@
                         data = _CAG.formatData(data, FormFilter);
 
                         for (var i=0; i < data.length; i++) {
-                            if (data[i].link && data[i].computedLapr.lowest) filteredArr.push(data[i])
+
+                            if (me.applyBtnOnly && data[i].hasApplyBtn != "true") continue;
+
+                            if (
+                                data[i].computedLaprAverage     >= 0 &&
+                                data[i].computedMrpymentAverage >= 0 &&
+                                data[i].lowestMonthlyFlatRate   >= 0 &&
+                                data[i].maxLoanAmount           >= me.options.loanAmnt    &&
+                                data[i].maxLoanTenure           >= me.options.tenureAmnt  &&
+                                data[i].minLoanAmount           <= me.options.loanAmnt    &&
+                                data[i].minLoanTenure           <= me.options.tenureAmnt  &&
+                                data[i].onlineLaanTap           == "true"
+                            ) filteredArr.push(data[i]);
+
                         }
 
                         filteredArr.sort(function (a, b) {
-                            return a.computedLapr.lowest - b.computedLapr.lowest;
+                            return a.computedMrpymentAverage - b.computedMrpymentAverage;
                         });
+
+                        data = filteredArr;
+
+                        for (var i = 0; i < filteredArr.length; i++) {
+                            if ( parseInt(data[i].featured) == 1  && parseInt(data[i].featured_onlineBanks) == 1) {
+                                featured = data.splice(i, 1);
+                                data.unshift(featured[0]);
+                                break;
+                            }
+                        }
 
                         me.data = filteredArr;
 
-                        var t;
                     }
 
-                    me.onDataReady();
+                    me.controller();
                 }
             });
 
         };
 
-        me.onDataReady = function () {};
+        me.controller = function () {};
 
 
         me.parseTpl = function(tpl, data) {
@@ -254,7 +278,17 @@
                 newArray.push(arr[i]);
             }
             return newArray;
-        };;
+        };
+
+        me.getId = function (id) {
+            for (var i = 0; i < me.data.length; i++) {
+                if (parseInt(me.data[i].id) == id) {
+                    console.log(me.data[i]);
+                    return me.data[i];
+                    break;
+                }
+            }
+        };
 
         $( document ).bind("ready", function() {
 
@@ -280,7 +314,7 @@
                 var $el = $(this);
                 $el.mouseover(function () {
                     me.displayRec = 3;
-                    me.onDataReady();
+                    if (!me.legacyMode) me.controller();
                     me.setPosition($el);
                 })
             });
