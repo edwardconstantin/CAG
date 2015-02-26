@@ -151,6 +151,28 @@ a.pl-yellow-button[href=''] {
     visibility: hidden;
 }
 
+.featured {
+    float: right;
+    padding: 2px 8px;
+    border-radius: 12px;
+    /* position: absolute; */
+    top: 45px;
+    left: 10px;
+    background-color: rgb(99, 99, 219);
+    color: white;
+    display: none;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+div.pl-widget div.pl-table table tr:nth-child(2) .featured {
+    display: inline-block;
+}
+
+.featured[featured=''] {
+    display: none;
+}
+
 div.pl-footer a.pl-yellow-button {
     font-size: 14px;
     font-weight: bold;

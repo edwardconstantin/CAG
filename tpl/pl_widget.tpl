@@ -10,7 +10,7 @@
             </tr>
             {{#repeat rows}}
             <tr data-id="{{dataid}}">
-                <td>{{id}} {{company.name}}</td>
+                <td>{{id}} {{company.name}} <span class="featured" featured="{{featured}}">Featured</span></td>
                 <td class="pl-blue">{{currency}} {{monthlyPayment}} / {{short_month}}</td>
                 <td class="pl-blue">{{monthlyInterestRate}}%</td>
                 <td><a class="pl-yellow-button" href="{{link}}" target="_blank">{{get_offer}}</a></div></td>
@@ -24,7 +24,7 @@
     <div class="pl-footer">
         <a id="more_options" class="pl-yellow-button" href="#">{{more_options}}</a>
         <div class="pl-powered-by">Powered by:<br />
-            <img src="http://d20kivgoyj2lem.cloudfront.net/assets/img/logo.png" width="70" />
+            <a href="http://www.samlino.dk"><img src="http://d20kivgoyj2lem.cloudfront.net/assets/img/logo.png" width="70" /></a>
         </div>
     </div>
 </div>

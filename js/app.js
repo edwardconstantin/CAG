@@ -1,7 +1,7 @@
 (function () {
 
     //--- This is an example using old data structure
-
+/*
     var car_widget = new MiniWidget({
         legacyMode  : true,
         dataPath    : 'tmp/oldservice.json',
@@ -18,7 +18,7 @@
 
     car_widget.controller = function () {widgetProcess(car_widget)};
     window.car_widget = car_widget;
-
+*/
     var watch_widget = new MiniWidget({
         legacyMode  : true,
         dataPath    : 'tmp/oldservice.json',
@@ -73,6 +73,7 @@
                     logo: data[i].logo
                 },
                 dataid                  : row.id,
+                featured                : row.featured,
                 currency                : localized.currency,
                 short_month             : localized.short_month,
                 monthlyPayment          : plwidget.format(row.computedMrpyment.lowest, 0, 3, ',', '.'),
