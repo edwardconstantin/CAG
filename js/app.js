@@ -77,7 +77,7 @@
                 currency                : localized.currency,
                 short_month             : localized.short_month,
                 monthlyPayment          : plwidget.format(row.computedMrpyment.lowest, 0, 3, ',', '.'),
-                monthlyInterestRate     : plwidget.format(row.computedLapr.lowest, 2, 3, ',', '.'),
+                monthlyInterestRate     : plwidget.format(parseFloat(row.lowestMonthlyFlatRate), 2, 3, ',', '.'),
                 get_offer               : localized.get_offer,
                 link                    : row.link
             });
@@ -109,6 +109,7 @@
     // An instance with all possible configuration options
     var mywidget = new MiniWidget({
         rootURL     : "http://www.ap-northeast-1.api.compareglobal.co.uk",
+        //rootURL     : "http://www.ap-northeast-1.pl-temp-v1.compareglobal.co.uk/personalLoans",
         proxyPath   : '/v1/money/loan',
         dataPath    : '/v1/result/',
         locale      : "en-HK",
@@ -116,7 +117,7 @@
         locale      : "da-DK",
         options: {
             locale      : "en-HK",
-            loanAmount  : 10000, // <-- This is the targetProperty defined further down
+            loanAmount  : 18000, // <-- This is the targetProperty defined further down
             loanTenure  : 60,
             filter      : "INSTALMENT"
         },
@@ -172,7 +173,7 @@
                 currency                : localized.currency,
                 short_month             : localized.short_month,
                 monthlyPayment          : mywidget.format(row.monthlyPayment, 0, 3, ',', '.'),
-                monthlyInterestRate     : row.monthlyInterestRate,
+                monthlyInterestRate     : mywidget.format(row.monthlyInterestRate, 2, 3, ',', '.'),
                 get_offer               : localized.get_offer
             });
         }

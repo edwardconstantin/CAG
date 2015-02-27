@@ -209,8 +209,50 @@
                  final_mrpyment.highest = -PMT(parseFloat(Math.pow((1 + highestMonthlyFlatRate), (1 / 12)) - 1), parseFloat(FormFilter.data.tenureAmnt), parseFloat(parseFloat(FormFilter.data.loanAmnt) + fixedHandlingFee + (monthlyFee * parseFloat(FormFilter.data.tenureAmnt))));
              }
              return final_mrpyment;
+         },
+
+         processData: function (data, options, applyBtnOnly) {
+             var data = data.compargoGlobalApiResponse.searchResults.searchResultItems,
+                 filteredArr = [],
+                 FormFilter = {};
+
+             FormFilter.data = options;
+             data = this.formatData(data, FormFilter);
+
+             for (var i = 0; i < data.length; i++) {
+
+                 if (applyBtnOnly && data[i].hasApplyBtn != "true") continue;
+
+                 if (
+                     data[i].computedLaprAverage >= 0 &&
+                     data[i].computedMrpymentAverage >= 0 &&
+                     data[i].lowestMonthlyFlatRate >= 0 &&
+                     data[i].maxLoanAmount >= options.loanAmnt &&
+                     data[i].maxLoanTenure >= options.tenureAmnt &&
+                     data[i].minLoanAmount <= options.loanAmnt &&
+                     data[i].minLoanTenure <= options.tenureAmnt &&
+                     data[i].onlineLaanTap == "true"
+                 ) filteredArr.push(data[i]);
+
+             }
+
+             filteredArr.sort(function (a, b) {
+                 return a.computedMrpymentAverage - b.computedMrpymentAverage;
+             });
+
+             data = filteredArr;
+
+             for (var i = 0; i < filteredArr.length; i++) {
+                 if (parseInt(data[i].featured) == 1 && parseInt(data[i].featured_onlineBanks) == 1) {
+                     featured = data.splice(i, 1);
+                     data.unshift(featured[0]);
+                     break;
+                 }
+             }
+
+             return filteredArr;
+
          }
      }
 
  })();
-
