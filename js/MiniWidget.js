@@ -59,6 +59,8 @@
 
         me.doneTpl = {};
 
+        me.data = [];
+
         me.getTemplates = function () {
             for (k in me.myTemplates) {
                 $.ajax({
@@ -84,7 +86,6 @@
                 type: "GET",
                 complete: function(data) {
                     me.lang = JSON.parse(data.responseText);
-                    me.rootURL ? me.requestData() : me.getResults();
                 }
             });
         }
@@ -119,6 +120,12 @@
             var token = token || '',
                 resultsUrl = me.dataURL + token;
 
+            //Make sure data is loaded only once in legacy mode.
+            if (me.legacyMode) {
+                if (MiniWidget.dataCalled) return;
+                MiniWidget.dataCalled = true;
+            }
+
             $.ajax({
                 url: resultsUrl,
                 type: "GET",
@@ -132,11 +139,14 @@
 
                     me.data = me.excludeItems(me.data);
 
-                    me.controller();
+                    if (me.legacyMode) MiniWidget.data = me.data;
+
                 }
             });
 
         };
+
+        me.rootURL ? me.requestData() : me.getResults();
 
         me.controller = function () {};
 
@@ -281,13 +291,18 @@
                 })
             });
 
-            me.documentReady();
+            me.documentReady = true;
 
         });
 
-        me.documentReady = function () {
-            //me.rootURL ? me.requestData() : me.getResults();
-        }
+        // Make sure everything is ready before calling the controller
+        var ready = setInterval(function () {
+            if (me.legacyMode) me.data = MiniWidget.data;
+            if (me.documentReady && me.data && me.data.length && me.lang && me.templates) {
+                me.controller();
+                clearInterval(ready);
+            }
+        }, 0);
     };
 
     window.MiniWidget = MiniWidget;

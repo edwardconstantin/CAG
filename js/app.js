@@ -9,6 +9,7 @@
         myTemplates: ['pl_widget'],
         applyBtnOnly : false,
         displayRec  : 3,
+        excludeList : [],
         targetProperty: 'loanAmnt',
         options: {
             //loanAmnt: 250000,
@@ -35,7 +36,7 @@
     });
 
     watch_widget.controller = function () {widgetProcess(watch_widget)};
-    window.watch_widget = watch_widget;
+   // window.watch_widget = watch_widget;
 
     var widgetProcess = function (plwidget) {
 
@@ -55,7 +56,7 @@
             row = {},
             rows = [];
 
-        console.log(data[0]);
+        //console.log(data[0]);
 
         $(plwidget.targetClass).text('Fra ' + plwidget.format(parseInt(data[0].computedMrpyment.lowest), 0, 3, ',', '.') + ' kr. pr/md.');
 
@@ -127,7 +128,7 @@
         targetProperty : 'loanAmount',
         pathToTemplates: 'tpl/',
         myTemplates: ['pl_widget'],
-        excludeList: [2, 3, 4, 5, 6],
+        excludeList: [],
         // Adjust widget position based on your design
         adjustOffset   : {
             top: -58,
