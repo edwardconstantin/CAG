@@ -1,32 +1,32 @@
 (function () {
 
     //--- This is an example using old data structure
-/*
-    var car_widget = new MiniWidget({
-        legacyMode  : true,
-        dataPath    : 'tmp/oldservice.json',
-        targetClass : '.plwidgetA',
-        myTemplates: ['pl_widget'],
-        applyBtnOnly : false,
-        displayRec  : 3,
-        excludeList : [],
-        targetProperty: 'loanAmnt',
-        options: {
-            //loanAmnt: 250000,
-            tenureAmnt: 60
-        }
-    });
+    /*
+        var car_widget = new MiniWidget({
+            legacyMode  : true,
+            dataPath    : 'tmp/oldservice.json',
+            targetClass : '.plwidgetA',
+            myTemplates: ['pl_widget'],
+            applyBtnOnly : false,
+            displayRec  : 3,
+            excludeList : [],
+            targetProperty: 'loanAmnt',
+            options: {
+                //loanAmnt: 250000,
+                tenureAmnt: 60
+            }
+        });
 
-    car_widget.controller = function () {widgetProcess(car_widget)};
-    window.car_widget = car_widget;
-*/
+        car_widget.controller = function () {widgetProcess(car_widget)};
+        window.car_widget = car_widget;
+    */
     var watch_widget = new MiniWidget({
-        legacyMode  : true,
-        dataPath    : 'tmp/oldservice.json',
-        targetClass : '.plwidgetB',
-        applyBtnOnly : false,
-        displayRec  : 3,
-        excludeList : [],
+        legacyMode: true,
+        dataPath: 'tmp/oldservice.json',
+        targetClass: '.plwidgetB',
+        applyBtnOnly: false,
+        displayRec: 3,
+        excludeList: [],
         myTemplates: ['pl_widget'],
         targetProperty: 'loanAmnt',
         options: {
@@ -35,8 +35,10 @@
         }
     });
 
-    watch_widget.controller = function () {widgetProcess(watch_widget)};
-   // window.watch_widget = watch_widget;
+    watch_widget.controller = function () {
+        widgetProcess(watch_widget)
+    };
+    // window.watch_widget = watch_widget;
 
     var widgetProcess = function (plwidget) {
 
@@ -45,9 +47,9 @@
 
         // Parse the title
         var title = plwidget.parseTpl(localized.loan_term, {
-            loanAmount  : plwidget.format(opt.loanAmnt, 0, 3, ',', '.'),
-            currency        : localized.currency,
-            tenureInYears   : parseInt(opt.tenureAmnt / 12)
+            loanAmount: plwidget.format(opt.loanAmnt, 0, 3, ',', '.'),
+            currency: localized.currency,
+            tenureInYears: parseInt(opt.tenureAmnt / 12)
         });
 
 
@@ -60,7 +62,7 @@
 
         $(plwidget.targetClass).text('Fra ' + plwidget.format(parseInt(data[0].computedMrpyment.lowest), 0, 3, ',', '.') + ' kr. pr/md.');
 
-        plwidget.displayRec = (plwidget.displayRec >= data.length)? data.length : plwidget.displayRec;
+        plwidget.displayRec = (plwidget.displayRec >= data.length) ? data.length : plwidget.displayRec;
 
         // Prepare data for #repeat directive
         for (var i = 0; i < plwidget.displayRec; i++) {
@@ -72,26 +74,26 @@
                     name: data[i].companyName,
                     logo: data[i].logo
                 },
-                dataid                  : row.id,
-                featured                : row.featured_onlineBanks,
-                applyButton             : row.applyButton,
-                currency                : localized.currency,
-                short_month             : localized.short_month,
-                monthlyPayment          : plwidget.format(row.computedMrpyment.lowest, 0, 3, ',', '.'),
-                monthlyInterestRate     : plwidget.format(parseFloat(row.lowestMonthlyFlatRate), 2, 3, ',', '.'),
-                get_offer               : localized.get_offer,
-                link                    : row.link
+                dataid: row.id,
+                featured: row.featured_onlineBanks,
+                applyButton: row.applyButton,
+                currency: localized.currency,
+                short_month: localized.short_month,
+                monthlyPayment: plwidget.format(row.computedMrpyment.lowest, 0, 3, ',', '.'),
+                monthlyInterestRate: plwidget.format(parseFloat(row.lowestMonthlyFlatRate), 2, 3, ',', '.'),
+                get_offer: localized.get_offer,
+                link: row.link
             });
         }
 
 
         // Parse the main template and include the parsed.rows
         parsed.main = plwidget.parseTpl(plwidget.templates.pl_widget, {
-            title           : title,
-            starting_from   : localized.starting_from,
-            rates_from      : localized.rates_from,
-            rows            : rows,
-            more_options    : localized.more_options
+            title: title,
+            starting_from: localized.starting_from,
+            rates_from: localized.rates_from,
+            rows: rows,
+            more_options: localized.more_options
         });
 
         plwidget.render();
@@ -109,28 +111,29 @@
 
     // An instance with all possible configuration options
     var mywidget = new MiniWidget({
-        rootURL     : "http://www.ap-northeast-1.api.compareglobal.co.uk",
+        //rootURL: "http://www.ap-northeast-1.api.compareglobal.co.uk",
         //rootURL     : "http://www.ap-northeast-1.pl-temp-v1.compareglobal.co.uk/personalLoans",
-        proxyPath   : '/v1/money/loan',
-        dataPath    : '/v1/result/',
-        locale      : "en-HK",
-        displayRec  : 3,
-        locale      : "da-DK",
+        //proxyPath: '/v1/money/loan',
+        //dataPath: '/v1/result/',
+        dataPath: 'tmp/newservice.json',
+        locale: "en-HK",
+        displayRec: 3,
+        locale: "da-DK",
         options: {
-            locale      : "en-HK",
-            loanAmount  : 18000, // <-- This is the targetProperty defined further down
-            loanTenure  : 60,
-            filter      : "INSTALMENT"
+            locale: "en-HK",
+            loanAmount: 18000, // <-- This is the targetProperty defined further down
+            loanTenure: 60,
+            filter: "INSTALMENT"
         },
-        targetClass    : '.plwidgetNew',
-        langFile       : 'lang/pl_lang.json',
-        targetAttr     : 'data',
-        targetProperty : 'loanAmount',
+        targetClass: '.plwidgetNew',
+        langFile: 'lang/pl_lang.json',
+        targetAttr: 'data',
+        targetProperty: 'loanAmount',
         pathToTemplates: 'tpl/',
         myTemplates: ['pl_widget'],
-        excludeList: [],
+        excludeList: [3, 4],
         // Adjust widget position based on your design
-        adjustOffset   : {
+        adjustOffset: {
             top: -58,
             left: 22
         }
@@ -143,9 +146,9 @@
 
         // Parse the title
         var title = mywidget.parseTpl(localized.loan_term, {
-            loanAmount      : mywidget.format(opt.loanAmount, 0, 3, ',', '.'),
-            currency        : localized.currency,
-            tenureInYears   : parseInt(opt.loanTenure / 12)
+            loanAmount: mywidget.format(opt.loanAmount, 0, 3, ',', '.'),
+            currency: localized.currency,
+            tenureInYears: parseInt(opt.loanTenure / 12)
         });
 
         console.log(mywidget.data[0]);
@@ -157,35 +160,35 @@
 
         data = mywidget.excludeItems(data);
 
-        $(mywidget.targetClass).text('Fra ' + mywidget.format(data[0].mortgage.monthlyPayment, 0, 3, ',', '.') + ' kr. pr/md.');
+        $(mywidget.targetClass).text('Fra ' + mywidget.format(data[0].mortgageDisplay.monthlyPayment, 0, 3, ',', '.') + ' kr. pr/md.');
 
-        mywidget.displayRec = (mywidget.displayRec >= data.length)? data.length : mywidget.displayRec;
+        mywidget.displayRec = (mywidget.displayRec >= data.length) ? data.length : mywidget.displayRec;
 
         // Prepare data for #repeat directive
         for (var i = 0; i < mywidget.displayRec; i++) {
-            row = data[i].mortgage;
+            row = data[i].mortgageDisplay;
             rows.push({
                 id: (i + 1 + '.'),
                 company: {
                     name: data[i].company.name
                 },
-                dataid                  : row.id,
-                link                    : '#',
-                currency                : localized.currency,
-                short_month             : localized.short_month,
-                monthlyPayment          : mywidget.format(row.monthlyPayment, 0, 3, ',', '.'),
-                monthlyInterestRate     : mywidget.format(row.monthlyInterestRate, 2, 3, ',', '.'),
-                get_offer               : localized.get_offer
+                dataid: data[i].id,
+                link: '#',
+                currency: localized.currency,
+                short_month: localized.short_month,
+                monthlyPayment: mywidget.format(row.monthlyPayment, 0, 3, ',', '.'),
+                monthlyInterestRate: mywidget.format(row.interestRate, 2, 3, ',', '.'),
+                get_offer: localized.get_offer
             });
         }
 
         // Parse the main template and include the parsed.rows
         parsed.main = mywidget.parseTpl(mywidget.templates.pl_widget, {
-            title           : title,
-            starting_from   : localized.starting_from,
-            rates_from      : localized.rates_from,
-            rows            : rows,
-            more_options    : localized.more_options
+            title: title,
+            starting_from: localized.starting_from,
+            rates_from: localized.rates_from,
+            rows: rows,
+            more_options: localized.more_options
         });
 
         mywidget.render();

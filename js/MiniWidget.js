@@ -6,7 +6,7 @@
         return;
     }
 
-    function MiniWidget (opt) {
+    function MiniWidget(opt) {
 
         var me = this;
 
@@ -14,9 +14,9 @@
 
         //--- Config options
 
-        me.rootURL   = opt.rootURL   || '';
+        me.rootURL = opt.rootURL || '';
         me.proxyPath = opt.proxyPath || '';
-        me.dataPath  = opt.dataPath  || '';
+        me.dataPath = opt.dataPath || '';
 
         me.locale = opt.locale || "da-DK";
 
@@ -28,12 +28,12 @@
 
         me.applyBtnOnly = opt.applyBtnOnly || false,
 
-        me.options = opt.options || {
-            locale: "en-HK",
-            loanAmount: 10000,
-            loanTenure: 60,
-            //filter: "INSTALMENT"
-        };
+            me.options = opt.options || {
+                locale: "en-HK",
+                loanAmount: 10000,
+                loanTenure: 60,
+                //filter: "INSTALMENT"
+            };
 
         me.targetClass = opt.targetClass || '.plwidget';
         me.targetAttr = opt.targetAttr || 'data';
@@ -68,9 +68,9 @@
                     type: "GET",
                     inc: k,
                     tpl: me.myTemplates[k],
-                    complete: function(data) {
+                    complete: function (data) {
                         me.templates[this.tpl] = data.responseText;
-                        if (this.inc == me.myTemplates.length-1) {
+                        if (this.inc == me.myTemplates.length - 1) {
                             me.onReadyTpl();
                         }
                     }
@@ -84,7 +84,7 @@
             $.ajax({
                 url: me.langFile,
                 type: "GET",
-                complete: function(data) {
+                complete: function (data) {
                     me.lang = JSON.parse(data.responseText);
                 }
             });
@@ -95,7 +95,7 @@
         me.onReadyTpl = function () {};
 
         me.proxyURL = me.rootURL + me.proxyPath;
-        me.dataURL  = me.rootURL + me.dataPath;
+        me.dataURL = me.rootURL + me.dataPath;
 
         me.requestData = function () {
 
@@ -105,7 +105,7 @@
                 dataType: "xml/html/script/json",
                 contentType: "application/json",
                 data: JSON.stringify(me.options, null, 2),
-                complete: function(data) {
+                complete: function (data) {
                     var data = JSON.parse(data.responseText),
                         token = data.message;
 
@@ -151,22 +151,24 @@
         me.controller = function () {};
 
 
-        me.parseTpl = function(tpl, data) {
+        me.parseTpl = function (tpl, data) {
 
             var repeatRegExp = /(?:{{(\s*#repeat.*?|\s*\/repeat\s*)}})/g,
                 repeatMatches = tpl.match(repeatRegExp);
 
             if (repeatMatches) {
-                for (i=0; i<repeatMatches.length; i++) {
-                   if (repeatMatches[i].indexOf('#repeat')>-1) {} else {break;}
+                for (i = 0; i < repeatMatches.length; i++) {
+                    if (repeatMatches[i].indexOf('#repeat') > -1) {} else {
+                        break;
+                    }
                 }
-                regEx = new RegExp('({{\\s*#repeat[\\s\\S]*?){' + (i-1) + '}({{\\s*#repeat[\\s\\S]*?{{\\s*\/repeat\\s*}})');
+                regEx = new RegExp('({{\\s*#repeat[\\s\\S]*?){' + (i - 1) + '}({{\\s*#repeat[\\s\\S]*?{{\\s*\/repeat\\s*}})');
                 repeat = tpl.match(regEx)[2];
                 tpl = me.tplRepeat(tpl, data, repeat);
             }
 
             return tpl.replace(/{{\s*(.*?)\s*}}/g, function (match, key) {
-                return key.split('.').reduce(function index(obj,i) {
+                return key.split('.').reduce(function index(obj, i) {
                     return obj[i] || '';
                 }, data) || '';
             });
@@ -183,7 +185,7 @@
             rows = data[matches[2]];
             partial = '';
             if (rows) {
-                for (j=0; j < rows.length; j++) {
+                for (j = 0; j < rows.length; j++) {
                     partial += me.parseTpl(matches[3], rows[j]);
                 }
             } else {
@@ -203,7 +205,7 @@
         123456.789.format(4, 4, ' ', ':');  // "12 3456:7890"
         12345678.9.format(0, 3, '-');       // "12-345-679
         */
-        me.format = function(number, n, x, s, c) {
+        me.format = function (number, n, x, s, c) {
             var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
                 num = number.toFixed(Math.max(0, ~~n));
             return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
@@ -226,7 +228,7 @@
             me.container.style.top = top + 'px';
             me.container.style.left = left + 'px';
 
-            $container.fadeIn(me.fadeSpeed, function() {});
+            $container.fadeIn(me.fadeSpeed, function () {});
             //me.getOnTop($container);
         }
 
@@ -234,16 +236,16 @@
         me.getOnTop = function ($container) {
             var max = 0;
             $('.mw-container').each(function () {
-                var z = parseInt( $( this ).css( "z-index" ), 10 );
-                max = Math.max( max, z );
+                var z = parseInt($(this).css("z-index"), 10);
+                max = Math.max(max, z);
             });
-            $container.css("z-index", max + 1 );
+            $container.css("z-index", max + 1);
         };
 
         //Filters out the items specified by me.excludeList property
         me.excludeItems = function (arr) {
             var newArray = new Array();
-            for(var i = 0; i<arr.length; i++){
+            for (var i = 0; i < arr.length; i++) {
                 if ($.inArray(parseInt(arr[i].id), me.excludeList) > -1) {
                     continue;
                 }
@@ -262,7 +264,7 @@
             }
         };
 
-        $( document ).bind("ready", function() {
+        $(document).bind("ready", function () {
 
             me.container = document.createElement('div');
             me.container.id = me.containerId;
@@ -276,7 +278,7 @@
                 $container.fadeOut(me.fadeSpeed);
             });
 
-            $(me.targetClass + ":first").attr(me.targetAttr, function(el, val) {
+            $(me.targetClass + ":first").attr(me.targetAttr, function (el, val) {
                 if ((val = parseInt(val)) > 0) {
                     me.options[me.targetProperty] = val;
                 }
@@ -299,7 +301,11 @@
         var ready = setInterval(function () {
             if (me.legacyMode) me.data = MiniWidget.data;
             if (me.documentReady && me.data && me.data.length && me.lang && me.templates) {
-                me.controller();
+                try {
+                    me.controller();
+                } catch (err) {
+                    console.error(err.stack);
+                };
                 clearInterval(ready);
             }
         }, 0);
@@ -311,7 +317,7 @@
 
 //--- Polyfill
 if (!Array.prototype.reduce) {
-    Array.prototype.reduce = function(callback /*, initialValue*/) {
+    Array.prototype.reduce = function (callback /*, initialValue*/ ) {
         'use strict';
         if (this == null) {
             throw new TypeError('Array.prototype.reduce called on null or undefined');
@@ -319,11 +325,14 @@ if (!Array.prototype.reduce) {
         if (typeof callback !== 'function') {
             throw new TypeError(callback + ' is not a function');
         }
-        var t = Object(this), len = t.length >>> 0, k = 0, value;
+        var t = Object(this),
+            len = t.length >>> 0,
+            k = 0,
+            value;
         if (arguments.length == 2) {
             value = arguments[1];
         } else {
-            while (k < len && ! k in t) {
+            while (k < len && !k in t) {
                 k++;
             }
             if (k >= len) {
@@ -339,6 +348,3 @@ if (!Array.prototype.reduce) {
         return value;
     };
 }
-
-
-
