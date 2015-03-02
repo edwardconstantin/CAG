@@ -151,7 +151,7 @@
             tenureInYears: parseInt(opt.loanTenure / 12)
         });
 
-        console.log(mywidget.data[0]);
+        //console.log(mywidget.data[0]);
 
         var data = mywidget.data,
             parsed = mywidget.doneTpl,
