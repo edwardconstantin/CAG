@@ -1,4 +1,5 @@
-#MiniWidget -- a library designed to quickly create tooltip-like widgets linked to any element in the page.
+#MiniWidget
+##A library designed to quickly create tooltip-like widgets linked to any element in the page.
 
 ##Features
 * Highly configurable.
