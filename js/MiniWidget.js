@@ -133,9 +133,14 @@
                 contentType: "application/json",
                 data: JSON.stringify(me.options, null, 2),
                 complete: function (data) {
-                    me.data = JSON.parse(data.responseText);
+                    me.response = JSON.parse(data.responseText);
 
-                    if (me.legacyMode) me.data = _CAG.processData(me.data, me.options, me.applyBtnOnly);
+                    if (me.legacyMode) {
+                        me.data = _CAG.processData(me.response, me.options, me.applyBtnOnly);
+                    } else {
+                        me.featured = me.response.featured;
+                        me.data = me.response.data;
+                    }
 
                     me.data = me.excludeItems(me.data);
 
@@ -146,10 +151,8 @@
 
         };
 
-        me.rootURL ? me.requestData() : me.getResults();
 
         me.controller = function () {};
-
 
         me.parseTpl = function (tpl, data) {
 
@@ -281,6 +284,7 @@
             $(me.targetClass + ":first").attr(me.targetAttr, function (el, val) {
                 if ((val = parseInt(val)) > 0) {
                     me.options[me.targetProperty] = val;
+                    me.rootURL ? me.requestData() : me.getResults();
                 }
             });
 

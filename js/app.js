@@ -111,19 +111,19 @@
 
     // An instance with all possible configuration options
     var mywidget = new MiniWidget({
-        //rootURL: "http://www.ap-northeast-1.api.compareglobal.co.uk",
-        //rootURL     : "http://www.ap-northeast-1.pl-temp-v1.compareglobal.co.uk/personalLoans",
-        //proxyPath: '/v1/money/loan',
-        //dataPath: '/v1/result/',
-        dataPath: 'tmp/newservice.json',
-        locale: "en-HK",
-        displayRec: 3,
+        rootURL: "http://www.ap-northeast-1.api.compareglobal.co.uk",
+        proxyPath: '/v1/money/loan/dk',
+        dataPath: '/v1/result/',
+
         locale: "da-DK",
+        //locale: "da-DK",
+        displayRec: 3,
         options: {
-            locale: "en-HK",
-            loanAmount: 18000, // <-- This is the targetProperty defined further down
-            loanTenure: 60,
-            filter: "INSTALMENT"
+            "locale": "da-DK",
+            //"loanAmount": 18000,
+            "loanTenure": 60,
+            "page":1
+            //"filter": "INSTALMENT"
         },
         targetClass: '.plwidgetNew',
         langFile: 'lang/pl_lang.json',
@@ -151,14 +151,12 @@
             tenureInYears: parseInt(opt.loanTenure / 12)
         });
 
-        //console.log(mywidget.data[0]);
+        console.log(mywidget.data[0]);
 
         var data = mywidget.data,
             parsed = mywidget.doneTpl,
             row = {},
             rows = [];
-
-        data = mywidget.excludeItems(data);
 
         $(mywidget.targetClass).text('Fra ' + mywidget.format(data[0].mortgageDisplay.monthlyPayment, 0, 3, ',', '.') + ' kr. pr/md.');
 
