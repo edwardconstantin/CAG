@@ -4,7 +4,7 @@
         "currency"          : "kr.",
         "loan_term"         : "Ved lån af {{currency}} {{loanAmount}} over {{tenureInYears}} år",
         "starting_from"     : "Ydelse fra",
-        "apr"               : "APR",
+        "apr"               : "ÅOP",
         "rates_from"        : "Rente fra",
         "get_offer"         : "Få lånetilbud",
         "more_options"      : "Flere muligheder",
