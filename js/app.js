@@ -58,7 +58,7 @@
             row = {},
             rows = [];
 
-        //console.log(data[0]);
+        console.log(data[0]);
 
         $(plwidget.targetClass).text('Fra ' + plwidget.format(parseInt(data[0].computedMrpyment.lowest), 0, 3, ',', '.') + ' kr. pr/md.');
 
@@ -80,6 +80,7 @@
                 currency: localized.currency,
                 short_month: localized.short_month,
                 monthlyPayment: plwidget.format(row.computedMrpyment.lowest, 0, 3, ',', '.'),
+                anualInterestRate: plwidget.format(parseFloat(row.computedLaprAverage), 2, 3, ',', '.'),
                 monthlyInterestRate: plwidget.format(parseFloat(row.lowestMonthlyFlatRate), 2, 3, ',', '.'),
                 get_offer: localized.get_offer,
                 link: row.link
@@ -87,11 +88,12 @@
         }
 
 
-        // Parse the main template and include the parsed.rows
+        // Parse the main template
         parsed.main = plwidget.parseTpl(plwidget.templates.pl_widget, {
             title: title,
             starting_from: localized.starting_from,
             rates_from: localized.rates_from,
+            apr: localized.apr,
             rows: rows,
             more_options: localized.more_options
         });
@@ -175,15 +177,17 @@
                 currency: localized.currency,
                 short_month: localized.short_month,
                 monthlyPayment: mywidget.format(row.monthlyPayment, 0, 3, ',', '.'),
+                anualInterestRate: mywidget.format(row.aprMax, 2, 3, ',', '.'),
                 monthlyInterestRate: mywidget.format(row.interestRate, 2, 3, ',', '.'),
                 get_offer: localized.get_offer
             });
         }
 
-        // Parse the main template and include the parsed.rows
+        // Parse the main template
         parsed.main = mywidget.parseTpl(mywidget.templates.pl_widget, {
             title: title,
             starting_from: localized.starting_from,
+            apr: localized.apr,
             rates_from: localized.rates_from,
             rows: rows,
             more_options: localized.more_options

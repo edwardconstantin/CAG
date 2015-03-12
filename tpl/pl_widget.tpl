@@ -5,6 +5,7 @@
             <tr>
                 <th></th>
                 <th>{{starting_from}}</th>
+                <th>{{apr}}</th>
                 <th>{{rates_from}}</th>
                 <th></th>
             </tr>
@@ -12,11 +13,12 @@
             <tr data-id="{{dataid}}">
                 <td>{{id}} {{company.name}} <span class="featured" featured="{{featured}}">Featured</span></td>
                 <td class="pl-blue">{{currency}} {{monthlyPayment}} / {{short_month}}</td>
+                <td class="pl-blue">{{anualInterestRate}}%</td>
                 <td class="pl-blue">{{monthlyInterestRate}}%</td>
                 <td><a class="pl-yellow-button" href="{{link}}" target="_blank" applyButton="{{applyButton}}">{{get_offer}}</a></div></td>
             </tr>
             <tr>
-                <td colspan="4"><div class="pl-hr"></div></td>
+                <td colspan="5"><div class="pl-hr"></div></td>
             </tr>
             {{/repeat}}
         </table>

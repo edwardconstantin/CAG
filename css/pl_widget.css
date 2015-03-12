@@ -7,7 +7,7 @@
 
 div.pl-widget {
     position: relative;
-    width: 540px;
+    width: 600px;
     display: inline-block;
     z-index: 9999;
     background-color: white;
@@ -64,13 +64,13 @@ div.pl-widget div.pl-table {
 }
 
 div.pl-widget table th:nth-child(1) {
-    width:35%;
+    width:50%;
 }
 
 div.pl-widget table th:nth-child(2),
 div.pl-widget table th:nth-child(3)
 {
-    width:25%;
+    width:20%;
 }
 
 div.pl-widget div.pl-table table th {
