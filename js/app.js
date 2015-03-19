@@ -1,25 +1,6 @@
 (function () {
 
-    //--- This is an example using old data structure
-    /*
-        var car_widget = new MiniWidget({
-            legacyMode  : true,
-            dataPath    : 'tmp/oldservice.json',
-            targetClass : '.plwidgetA',
-            myTemplates: ['pl_widget'],
-            applyBtnOnly : false,
-            displayRec  : 3,
-            excludeList : [],
-            targetProperty: 'loanAmnt',
-            options: {
-                //loanAmnt: 250000,
-                tenureAmnt: 60
-            }
-        });
-
-        car_widget.controller = function () {widgetProcess(car_widget)};
-        window.car_widget = car_widget;
-    */
+    //--- This is an example using old platform
     var watch_widget = new MiniWidget({
         legacyMode: true,
         dataPath: 'tmp/oldservice.json',
@@ -30,7 +11,6 @@
         myTemplates: ['pl_widget'],
         targetProperty: 'loanAmnt',
         options: {
-            //loanAmnt: 18000,
             tenureAmnt: 60
         }
     });
@@ -111,21 +91,18 @@
 
     //--- This is an example using new data structure
 
-    // An instance with all possible configuration options
+    // An instance with all possible configuration options -- new patform
     var mywidget = new MiniWidget({
         rootURL: "http://www.ap-northeast-1.api.compareglobal.co.uk",
-        proxyPath: '/v1/money/loan/dk',
+        proxyPath: '/v1/money/loan/',
         dataPath: '/v1/result/',
-
         locale: "da-DK",
-        //locale: "da-DK",
         displayRec: 3,
         options: {
             "locale": "da-DK",
-            //"loanAmount": 18000,
             "loanTenure": 60,
-            "page":1
-            //"filter": "INSTALMENT"
+            "sortby": 3,
+            "page": 1
         },
         targetClass: '.plwidgetNew',
         langFile: 'lang/pl_lang.json',
@@ -133,7 +110,7 @@
         targetProperty: 'loanAmount',
         pathToTemplates: 'tpl/',
         myTemplates: ['pl_widget'],
-        excludeList: [3, 4],
+        //excludeList: [3, 4],
         // Adjust widget position based on your design
         adjustOffset: {
             top: -58,

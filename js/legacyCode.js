@@ -31,7 +31,7 @@
          return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
      };
 
-     _ = {};
+     var _ = {};
 
      _.each = _.forEach = function (obj, iteratee, context) {
          iteratee = optimizeCb(iteratee, context);
